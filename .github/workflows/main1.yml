@@ -35,11 +35,6 @@ jobs:
         registry: ${{secrets.ACR_REGISTER}} # Replace with your ACR login server
         username: ${{ secrets.ACR_USERNAME }} # Store ACR username as a secret
         password: ${{ secrets.ACR_PASSWORD }} # Store ACR password or Service Principal password as a secret
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
     - name: Azure WebApp Deploy
       uses: azure/webapps-deploy@v2
       with:
