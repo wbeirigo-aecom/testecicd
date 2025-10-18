@@ -31,9 +31,6 @@
 
 
 
-- docker login -u token-dev -p /XLq5vQus5nWgDQSD3ETY9oLbvKZNmlnRwXjH+AfIg+ACRBD7wST iocastacr01.azurecr.io 
-
-
 
 
 - name: Get the tag name
