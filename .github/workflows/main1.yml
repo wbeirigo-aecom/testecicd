@@ -45,5 +45,20 @@ jobs:
         push: true
         tags: |
           ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-         
 
+  deploy:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to remote host
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST_IP }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login -u "${{ secrets.ACR_USERNAME }}" --password-stdin ${{ secrets.ACR_REGISTER }}
+          
+          docker rm -f ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+          docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
+          docker run -it -p ${{ env.DOCKER_OUT_PORT }}:${{ env.DOCKER_INNER_PORT }} --restart always --name ${{ env.DOCKER_CONTAINER_NAME }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
