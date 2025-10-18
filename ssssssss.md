@@ -88,3 +88,6 @@ DOCKER_CONTAINER_NAME
 DOCKER_IMAGE_NAME
 DOCKER_INNER_PORT
 DOCKER_OUT_PORT
+
+
+docker run -it -d -p 8080:8000 -d meu_docker --restart allways 
