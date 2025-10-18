@@ -36,13 +36,6 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }} # Store ACR username as a secret
         password: ${{ secrets.ACR_PASSWORD }} # Store ACR password or Service Principal password as a secret
 
-    - name: Build and push to dockerhub
-      uses: docker/build-push-action@v5
-      with:
-       context: .
-       push: true
-       tags: ${{secrets.ACR_REGISTER}}/${{env.DOCKER_IMAGE_NAME}}:latest
-
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
