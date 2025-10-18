@@ -4,6 +4,7 @@
 sudo useradd -m -s /bin/bash deploy
 sudo passwd -l deploy  # bloqueia o uso de senha
 
+
 # Criar diretório .ssh e definir permissões
 sudo mkdir -p /home/deploy/.ssh
 sudo chmod 700 /home/deploy/.ssh
