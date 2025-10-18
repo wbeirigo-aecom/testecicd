@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 
 
@@ -89,6 +88,3 @@ DOCKER_CONTAINER_NAME
 DOCKER_IMAGE_NAME
 DOCKER_INNER_PORT
 DOCKER_OUT_PORT
-=======
-sasadadasda
->>>>>>> refs/remotes/origin/main
