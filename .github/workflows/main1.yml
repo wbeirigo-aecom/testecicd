@@ -35,9 +35,15 @@ jobs:
         registry: ${{secrets.ACR_REGISTER}} # Replace with your ACR login server
         username: ${{ secrets.ACR_USERNAME }} # Store ACR username as a secret
         password: ${{ secrets.ACR_PASSWORD }} # Store ACR password or Service Principal password as a secret
-    - name: Azure WebApp Deploy
-      uses: azure/webapps-deploy@v2
+
+    - name: Build and Push the Docker Image
+      uses: docker/build-push-action@v6
       with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME }} # Name of the Azure Web App
-        slot-name: 'production'
-        images: ${{secrets.ACR_REGISTER}}/${{env.DOCKER_IMAGE_NAME}}:latest
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+          ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+        cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:buildcache
+        cache-to: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:buildcache,mode=max
