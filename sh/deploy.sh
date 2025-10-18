@@ -9,6 +9,7 @@ sudo mkdir -p /home/deploy/.ssh
 sudo chmod 700 /home/deploy/.ssh
 sudo chown deploy:deploy /home/deploy/.ssh
 
+
 # Gerar chave SSH (sem senha)
 sudo -u deploy ssh-keygen -t rsa -b 4096 -f /home/deploy/.ssh/id_rsa -N ""
 
