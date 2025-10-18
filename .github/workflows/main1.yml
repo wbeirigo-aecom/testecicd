@@ -1,0 +1,55 @@
+name: Deploy FastAPI App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+    
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        uv-version: 'latest' # or a specific version like '0.1.2'
+        enable-cache: true
+
+    - name: Install dependencies
+      run: uv sync # Installs dependencies based on pyproject.toml or requirements.txt
+
+    - name: Run tests
+      run: uv run pytest
+
+  build-and-push:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Log in to Azure Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{secrets.ACR_REGISTER}} # Replace with your ACR login server
+        username: ${{ secrets.ACR_USERNAME }} # Store ACR username as a secret
+        password: ${{ secrets.ACR_PASSWORD }} # Store ACR password or Service Principal password as a secret
+
+    - name: Build and push to dockerhub
+      uses: docker/build-push-action@v5
+      with:
+       context: .
+       push: true
+       tags: ${{secrets.ACR_REGISTER}}/${{env.DOCKER_IMAGE_NAME}}:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure WebApp Deploy
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.AZURE_WEBAPP_NAME }} # Name of the Azure Web App
+        slot-name: 'production'
+        images: ${{secrets.ACR_REGISTER}}/${{env.DOCKER_IMAGE_NAME}}:latest
