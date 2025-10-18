@@ -59,6 +59,10 @@ jobs:
         script: |
           echo "${{ secrets.ACR_PASSWORD }}" | docker login -u "${{ secrets.ACR_USERNAME }}" --password-stdin ${{ secrets.ACR_REGISTER }}
           
-          docker rm -f ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-          docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
+          if [ "$(docker ps -a -q -f name="${{ env.DOCKER_CONTAINER_NAME }}")" ]; then
+
+            docker rm -f ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+            docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
+          fi
+
           docker run -it -p ${{ env.DOCKER_OUT_PORT }}:${{ env.DOCKER_INNER_PORT }} --restart always --name ${{ env.DOCKER_CONTAINER_NAME }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
