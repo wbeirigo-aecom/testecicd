@@ -65,4 +65,5 @@ jobs:
             docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
           fi
 
-          docker run -it -p ${{ env.DOCKER_OUT_PORT }}:${{ env.DOCKER_INNER_PORT }} --restart always --name ${{ env.DOCKER_CONTAINER_NAME }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+          docker run -it -p ${{ env.DOCKER_OUT_PORT }}:${{ env.DOCKER_INNER_PORT }} --restart always --name ${{ env.DOCKER_CONTAINER_NAME }} ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}
+
