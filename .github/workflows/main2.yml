@@ -20,4 +20,4 @@ jobs:
       env:
         API_KEY: ${{ secrets.MY_API_KEY }} # Accessing a GitHub secret
         APP_ENV: production
-      run: python -m uvicorn main:app --host 0.0.0.0 --port 8000
+      run: python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
