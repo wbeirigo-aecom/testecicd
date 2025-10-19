@@ -16,11 +16,14 @@ jobs:
     - name: Set up uv
       uses: astral-sh/setup-uv@v6
       with:
-        uv-version: 'latest' # or a specific version like '0.1.2'
+        uv-version: '0.8.23' # or a specific version like '0.1.2'
         enable-cache: true
 
     - name: Install dependencies
       run: uv sync # Installs dependencies based on pyproject.toml or requirements.txt
+
+    ##- name: Run tests
+    ##  run: uv run pytest
 
   build-and-push:
     needs: tests
