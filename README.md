@@ -1,5 +1,5 @@
 
-
+[![Deploy FastAPI App](https://github.com/wbeirigo-aecom/testecicd/actions/workflows/main1.yml/badge.svg)](https://github.com/wbeirigo-aecom/testecicd/actions/workflows/main1.yml)
 
 
     name: Send Email with SendGrid
