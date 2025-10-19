@@ -44,5 +44,13 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ${{secrets.ACR_REGISTER}}/dev/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          
 
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ${{secrets.ACR_REGISTER}}/dev/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} .
+ 
+    - name: Push Docker image to ACR
+      run: docker push ${{secrets.ACR_REGISTER}}/dev/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+      
