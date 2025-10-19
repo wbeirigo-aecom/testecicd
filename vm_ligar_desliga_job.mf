@@ -1,0 +1,50 @@
+# ⚙️ GitHub Actions: Ligar e Desligar VM no Azure
+
+Este workflow usa a CLI do Azure para iniciar e parar uma máquina virtual. Certifique-se de que as permissões e credenciais estejam configuradas corretamente.
+
+## 🔐 Pré-requisitos
+
+- Criar um **Service Principal** no Azure com permissões para gerenciar VMs.
+- Adicionar os seguintes **segredos** no repositório GitHub:
+  - `AZURE_CLIENT_ID`
+  - `AZURE_TENANT_ID`
+  - `AZURE_SUBSCRIPTION_ID`
+  - `AZURE_CLIENT_SECRET`
+  - `AZURE_RESOURCE_GROUP`
+  - `AZURE_VM_NAME`
+
+## 🚀 Workflow YAML
+
+```yaml
+name: Azure VM Control
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'start or stop'
+        required: true
+        default: 'start'
+
+jobs:
+  control-vm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Start or Stop VM
+        run: |
+          if [ "${{ github.event.inputs.action }}" == "start" ]; then
+            az vm start --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_VM_NAME }}
+          elif [ "${{ github.event.inputs.action }}" == "stop" ]; then
+            az vm deallocate --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_VM_NAME }}
+          else
+            echo "Ação inválida: use 'start' ou 'stop'"
+            exit 1
+          fi
