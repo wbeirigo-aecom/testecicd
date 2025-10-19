@@ -22,9 +22,6 @@ jobs:
     - name: Install dependencies
       run: uv sync # Installs dependencies based on pyproject.toml or requirements.txt
 
-    ##- name: Run tests
-    ##  run: uv run pytest
-
   build-and-push:
     needs: tests
     runs-on: ubuntu-latest
