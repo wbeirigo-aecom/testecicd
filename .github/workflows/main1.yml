@@ -43,3 +43,25 @@ jobs:
  
     - name: Push Docker image to ACR
       run: docker push iocastacr01.azurecr.io/dev/testecicd:latest
+
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to remote host
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST_IP }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login -u "${{ secrets.ACR_USERNAME }}" --password-stdin ${{ secrets.ACR_REGISTER }}
+          
+          if [ "$(docker ps -a -q -f name="${{ env.DOCKER_CONTAINER_NAME }}")" ]; then
+
+            docker rm -f ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+            docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
+          fi
+
+          docker run -it -d -p 8080:8000 --restart=always --name ${{ env.DOCKER_CONTAINER_NAME }}    docker push iocastacr01.azurecr.io/dev/testecicd:latest
