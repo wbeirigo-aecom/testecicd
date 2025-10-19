@@ -65,6 +65,6 @@ jobs:
           fi
 
           docker pull iocastacr01.azurecr.io/dev/testecicd:latest
-          docker run -it -d -p 8080:8000 --restart=always --name ${{ env.DOCKER_CONTAINER_NAME }} iocastacr01.azurecr.io/dev/testecicd:latest
+          docker run -it -d -p 8080:8000 --restart=always --name teste_container iocastacr01.azurecr.io/dev/testecicd:latest
 
           
