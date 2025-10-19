@@ -36,21 +36,10 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }} # Store ACR username as a secret
         password: ${{ secrets.ACR_PASSWORD }} # Store ACR password or Service Principal password as a secret
 
-
-    - name: Build and Push the Docker Image
-      uses: docker/setup-buildx-action@v3
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          
-
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Build Docker image
-      run: docker build -t ${{secrets.ACR_REGISTER}}/dev/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} .
+      run: docker build -t iocastacr01.azurecr.io/dev/testecicd:latest .
  
     - name: Push Docker image to ACR
-      run: docker push ${{secrets.ACR_REGISTER}}/dev/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
-      
+      run: docker push iocastacr01.azurecr.io/dev/testecicd:latest
