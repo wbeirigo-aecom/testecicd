@@ -22,3 +22,5 @@ sudo chown deploy:deploy /home/deploy/.ssh/authorized_keys
 echo "Usuário 'deploy' criado com acesso apenas por chave SSH."
 echo "Chave privada está em /home/deploy/.ssh/id_rsa"
 
+
+
