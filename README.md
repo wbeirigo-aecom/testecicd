@@ -8,7 +8,7 @@
 
     jobs:
       send_email:
-        runs-on: ubuntu-latest
+        runs-on: selfself-hosted
         steps:
           - name: SendGrid Email
             uses: peter-evans/sendgrid-action@v1
