@@ -57,11 +57,11 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         script: |
           echo "${{ secrets.ACR_PASSWORD }}" | docker login -u "${{ secrets.ACR_USERNAME }}" --password-stdin ${{ secrets.ACR_REGISTER }}
-          
-          if [ "$(docker ps -a -q -f name="${{ env.DOCKER_CONTAINER_NAME }}")" ]; then
 
-            docker rm -f ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-            docker rmi ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:*
+          if [ "$(docker ps -a -q -f name="teste_container")" ]; then
+
+            docker rm -f teste_container
+            docker rmi iocastacr01.azurecr.io/dev/testecicd:*
           fi
 
           docker pull iocastacr01.azurecr.io/dev/testecicd:latest
