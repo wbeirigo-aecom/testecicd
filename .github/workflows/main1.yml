@@ -65,3 +65,5 @@ jobs:
           fi
 
           docker run -it -d -p 8080:8000 --restart=always --name ${{ env.DOCKER_CONTAINER_NAME }}    docker push iocastacr01.azurecr.io/dev/testecicd:latest
+
+          
